@@ -3,10 +3,16 @@ import React, { Component } from 'react';
 import { Switch, StyleSheet, Text, View, ScrollView, Dimensions, TextInput, Pressable } from 'react-native';
 import * as Contacts from 'expo-contacts';
 import * as Permissions from 'expo-permissions';
+import { useNavigation } from '@react-navigation/native';
 
 const { height, width } = Dimensions.get('window');
 
 export default class App extends Component {
+  function(props) {
+    const navigation = useNavigation();
+    return <MyBackButton {...props} navigation={navigation} />
+  }
+  
   state = {
     contacts: [],
     campos: [
@@ -67,6 +73,7 @@ export default class App extends Component {
   }
 
   render () {
+    const { navigation } = this.props;
     if(this.state.switchValue === false) {
       containerColor = styles.containerLight;
       titleColor = styles.titleLight;
@@ -128,7 +135,7 @@ export default class App extends Component {
                   buttonColor
                 ]}
                 key={contact.id}
-                onPress={() => alert('Pressionado')}
+                onPress={() => navigation.navigate('ContactInfos', { contact: contact, switchValue: this.state.switchValue })}
               >
                 {({ pressed }) => (
                   <Text style={textColor}>
